@@ -26,9 +26,9 @@ class LayoutVisualization {
             var label = labels.ContainsKey(classId) ? labels[classId] : $"Unknown {classId}";
             var color = getColor(classId);
             using var pen = new Pen(color, penWidth);
-            using var brush = pen.Brush;
-            using var backBrush = new SolidBrush(Color.FromArgb(255 - color.R, 255 - color.G, 255 - color.B));
-            
+            using var backBrush = pen.Brush;
+            using var textBrush = new SolidBrush((color.R + color.G + color.B) / 3 > 127 ? Color.Black : Color.White);
+
             if (drawName) {
                 foreach (var rec in rect) {
                     const float textBackMargin = 1f;
@@ -45,7 +45,7 @@ class LayoutVisualization {
                         textSize.Width + (textBackMargin * 2),
                         textSize.Height + (textBackMargin * 2)
                     );
-                    graphics.DrawString(text, font!, brush, textX, textY);
+                    graphics.DrawString(text, font!, textBrush, textX, textY);
                 }
             }
 

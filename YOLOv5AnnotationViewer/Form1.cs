@@ -46,7 +46,7 @@ public partial class Form1 : Form {
         }
 
         foreach (var (classId, name) in visual.labels)
-            columnsPanel.Controls.Add(new ClassItem(LayoutVisualization.getColor(classId), name) {
+            columnsPanel.Controls.Add(new ClassItem(LayoutVisualization.getColor(classId), $"{classId} - {name}") {
                 Margin = new(0),
                 Size = new(columnsPanel.Width - 25, 38),
             });
@@ -71,7 +71,8 @@ public partial class Form1 : Form {
         Image? oimg = null;
 
         try {
-            oimg = Image.FromFile(imgPath);
+            using var stream = File.OpenRead(imgPath);
+            oimg = Image.FromStream(stream);
         } catch { }
         
         if (oimg == null)
