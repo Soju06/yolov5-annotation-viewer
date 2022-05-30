@@ -2,7 +2,8 @@
 
 yolov5 라벨 시각화
 
-![image](https://user-images.githubusercontent.com/34199905/169645583-59897861-fabb-4abe-9f54-1f1360c4242d.png)
+![image](https://user-images.githubusercontent.com/34199905/170930845-37b16fd4-db2d-464c-b4bb-71996caddbf2.png)
+
 
 ## Support folder structure
 
