@@ -1,4 +1,7 @@
-﻿namespace YOLOv5Label;
+﻿using System.Security.Cryptography;
+using System.Text;
+
+namespace YOLOv5Label;
 class LayoutVisualization {
     public Dictionary<int, string> labels { get; } = new();
 
@@ -24,7 +27,7 @@ class LayoutVisualization {
 
         foreach (var (classId, rect) in rects) {
             var label = labels.ContainsKey(classId) ? labels[classId] : $"Unknown {classId}";
-            var color = getColor(classId);
+            var color = getColor(label);
             using var pen = new Pen(color, penWidth);
             using var backBrush = pen.Brush;
             using var textBrush = new SolidBrush((color.R + color.G + color.B) / 3 > 127 ? Color.Black : Color.White);
@@ -60,29 +63,10 @@ class LayoutVisualization {
         }
     }
 
-    public static Color getColor(int classId) =>
-        colors.ContainsKey(classId) ? colors[classId] : Color.White;
+    static MD5 hash = MD5.Create();
 
-    static Dictionary<int, Color> colors = new() {
-            { 0, Color.Red },
-            { 1, Color.Green },
-            { 2, Color.Blue },
-            { 3, Color.Yellow },
-            { 4, Color.Purple },
-            { 5, Color.Cyan },
-            { 6, Color.Orange },
-            { 7, Color.Pink },
-            { 8, Color.Brown },
-            { 9, Color.LightBlue },
-            { 10, Color.LightGreen },
-            { 11, Color.LightGray },
-            { 12, Color.LightYellow },
-            { 13, Color.LightCyan },
-            { 14, Color.LightPink },
-            { 15, Color.DarkBlue },
-            { 16, Color.DarkGreen },
-            { 17, Color.DarkGray },
-            { 18, Color.DarkCyan },
-            { 19, Color.DarkOrange }
-        };
+    public static Color getColor(string label) {
+        var chash = hash.ComputeHash(Encoding.UTF8.GetBytes(label));
+        return Color.FromArgb(255, chash[^1], chash[^2], chash[^3]);
+    }
 }

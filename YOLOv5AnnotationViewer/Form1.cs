@@ -46,7 +46,7 @@ public partial class Form1 : Form {
         }
 
         foreach (var (classId, name) in visual.labels)
-            columnsPanel.Controls.Add(new ClassItem(LayoutVisualization.getColor(classId), $"{classId} - {name}") {
+            columnsPanel.Controls.Add(new ClassItem(LayoutVisualization.getColor(name), $"{classId} - {name}") {
                 Margin = new(0),
                 Size = new(columnsPanel.Width - 25, 38),
             });
@@ -83,7 +83,8 @@ public partial class Form1 : Form {
         updateView();
     }
 
-    protected override void OnResizeEnd(EventArgs e) {
+    protected override void OnResize(EventArgs e) {
+        base.OnResize(e);
         updateView();
     }
 
@@ -92,11 +93,13 @@ public partial class Form1 : Form {
             return;
         lock (visual) {
             var scale = Math.Min((float)imageView.Width / image.Width, (float)imageView.Height / image.Height);
+
+            if (scale <= 0)
+                return;
+            
             var img = new Bitmap(image, new((int)(scale * image.Width), (int)(scale * image.Height)));
 
             using var graphics = Graphics.FromImage(img);
-
-            imageView.SuspendLayout();
 
             using (var i = imageView.Image)
                 imageView.Image = null;
@@ -112,7 +115,6 @@ public partial class Form1 : Form {
             );
 
             imageView.Image = img;
-            imageView.ResumeLayout();
         }
     }
 }
